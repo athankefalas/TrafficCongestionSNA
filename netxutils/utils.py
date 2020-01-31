@@ -44,13 +44,13 @@ def nodes_from_edges(edges):
     nodes = []
 
     for edge in edges:
-        nodeFirst = edge[0]
-        nodeSecond = edge[1]
+        node_first = edge[0]
+        node_second = edge[1]
 
-        if nodeFirst not in nodes:
-            nodes.append(nodeFirst)
-        if nodeSecond not in nodes:
-            nodes.append(nodeSecond)
+        if node_first not in nodes:
+            nodes.append(node_first)
+        if node_second not in nodes:
+            nodes.append(node_second)
 
     return nodes
 
@@ -62,11 +62,11 @@ def betweenness_centrality_critical_nodes(network, critical_edges=None, limit=No
         critical_edges = []
 
     for edge in critical_edges:
-        nodeFirst = edge[0]
-        nodeSecond = edge[1]
+        node_first = edge[0]
+        node_second = edge[1]
 
-        critical_nodes.append(nodeFirst)
-        critical_nodes.append(nodeSecond)
+        critical_nodes.append(node_first)
+        critical_nodes.append(node_second)
 
     critical_nodes = list(set(critical_nodes))
 
@@ -75,12 +75,12 @@ def betweenness_centrality_critical_nodes(network, critical_edges=None, limit=No
             return critical_nodes
 
     # find betweenness centrality for all nodes
-    betweenness_centralities = nx.betweenness_centrality(network, normalized=True)
+    all_betweenness_centralities = nx.betweenness_centrality(network, normalized=True)
 
     centralities_list = []
 
-    for key in betweenness_centralities.keys():
-        centralities_list.append((key, betweenness_centralities[key]))
+    for key in all_betweenness_centralities.keys():
+        centralities_list.append((key, all_betweenness_centralities[key]))
 
     centralities_list = sorted(centralities_list, key=lambda pair: pair[1], reverse=True)
 
@@ -91,7 +91,7 @@ def betweenness_centrality_critical_nodes(network, critical_edges=None, limit=No
         k_threshold = threshold
     else:
         if len(critical_nodes) > 0:
-            centralities = list(map(lambda it: betweenness_centralities[it], critical_nodes))
+            centralities = list(map(lambda it: all_betweenness_centralities[it], critical_nodes))
             centralities.sort()
             k_threshold = centralities[-1]
         else:
@@ -128,11 +128,11 @@ def degree_centrality_critical_nodes(network, critical_edges=None, limit=None, t
         critical_edges = []
 
     for edge in critical_edges:
-        nodeFirst = edge[0]
-        nodeSecond = edge[1]
+        node_first = edge[0]
+        node_second = edge[1]
 
-        critical_nodes.append(nodeFirst)
-        critical_nodes.append(nodeSecond)
+        critical_nodes.append(node_first)
+        critical_nodes.append(node_second)
 
     critical_nodes = list(set(critical_nodes))
 
@@ -141,12 +141,12 @@ def degree_centrality_critical_nodes(network, critical_edges=None, limit=None, t
             return critical_nodes
 
     # find betweenness centrality for all nodes
-    degree_centralities = nx.degree_centrality(network)
+    all_degree_centralities = nx.degree_centrality(network)
 
     centralities_list = []
 
-    for key in degree_centralities.keys():
-        centralities_list.append((key, degree_centralities[key]))
+    for key in all_degree_centralities.keys():
+        centralities_list.append((key, all_degree_centralities[key]))
 
     centralities_list = sorted(centralities_list, key=lambda pair: pair[1], reverse=True)
 
@@ -157,7 +157,7 @@ def degree_centrality_critical_nodes(network, critical_edges=None, limit=None, t
         k_threshold = threshold
     else:
         if len(critical_nodes) > 0:
-            centralities = list(map(lambda it: degree_centralities[it], critical_nodes))
+            centralities = list(map(lambda it: all_degree_centralities[it], critical_nodes))
             centralities.sort()
             k_threshold = centralities[-1]
         else:
@@ -187,10 +187,49 @@ def degree_centrality_critical_nodes(network, critical_edges=None, limit=None, t
     return critical_nodes
 
 
+def min_degree(graph):
+    all_degrees = nx.degree(graph)
+
+    min_deg = len(nx.nodes(graph)) - 1
+
+    for node_degree_pair in all_degrees:
+        degree = node_degree_pair[1]
+
+        if degree < min_deg:
+            min_deg = degree
+
+    return min_deg
 
 
+def max_degree(graph):
+    all_degrees = nx.degree(graph)
+
+    max_deg = 0
+
+    for node_degree_pair in all_degrees:
+        degree = node_degree_pair[1]
+
+        if degree > max_deg:
+            max_deg = degree
+
+    return max_deg
 
 
+def betweenness_centralities(graph):
+    return nx.betweenness_centrality(graph, normalized=True)
 
 
+def degree_centralities(graph):
+    return nx.degree_centrality(graph)
 
+
+def degrees(graph):
+    all_degrees = nx.degree(graph)
+    degrees_map = dict()
+
+    for node_degree_pair in all_degrees:
+        node = node_degree_pair[0]
+        degree = node_degree_pair[1]
+        degrees_map[node] = degree
+
+    return degrees_map
