@@ -16,13 +16,14 @@ def decreasing_cascade(graph, seed_nodes, max_iter=None, diffusion_probability_g
 
     if diffusion_probability_generator is not None:
         if not callable(diffusion_probability_generator):
-            raise AssertionError("Paramater diffusion_probability_generator is not callable.")
+            raise AssertionError("Parameter diffusion_probability_generator is not callable.")
     else:
         diffusion_probability_generator = uniform_rand_probability
 
     if max_iter is None:
         max_iter = min(len(nx.edges(graph)), 100)
 
+    # cache the diffusion probabilities
     for edge in nx.edges(graph):
         node_one = edge[0]
         node_other = edge[1]
@@ -36,7 +37,6 @@ def decreasing_cascade(graph, seed_nodes, max_iter=None, diffusion_probability_g
         node_one_probs[node_other] = diffusion_prob
         diff_probas[node_one] = node_one_probs
 
-    # print("Starting...")
     affected = set(seed_nodes)
 
     active = set(seed_nodes)
@@ -48,6 +48,7 @@ def decreasing_cascade(graph, seed_nodes, max_iter=None, diffusion_probability_g
         if step > max_iter:
             break
 
+        # diffuse the next step and get the active, inactive and visited nodes
         active, inactive, visited_nodes = __decreasing_cascade_diffuse__(graph, active, inactive,
                                                                          visited_nodes, diff_probas)
         step += 1
