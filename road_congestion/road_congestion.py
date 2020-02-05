@@ -91,6 +91,8 @@ def run_road_congestion():
 
     print("Common nodes:", set(optimal_max).intersection(optimal_min))
 
+    print("")  # console padding
+
     print("Finding propagation ability of high priority nodes...")
     affected = diffuse.decreasing_cascade(road_net, list(critical_nodes), diffusion_probability_generator=diffusion_probability)
     affected_percentage = (len(affected) / len(nodes)) * 100
