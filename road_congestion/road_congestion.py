@@ -94,10 +94,8 @@ def run_road_congestion():
     print("")  # console padding
 
     print("Finding propagation ability of high priority nodes...")
-    affected = diffuse.decreasing_cascade(road_net, list(critical_nodes), diffusion_probability_generator=diffusion_probability)
-    affected_percentage = (len(affected) / len(nodes)) * 100
-    print("Affected", affected_percentage, "% of nodes. Affected:", affected)
-
+    affected_percentage_avg = avg_diffusion_potential(road_net, list(critical_nodes), iter_count=1000)
+    print("Average diffusion potential:", affected_percentage_avg)
 
 
 def edges_info_map(graph):
@@ -177,6 +175,20 @@ def diffusion_probability(edge):
     # print("Flow of ", edge_info.describe(), ":", flow)
 
     return flow
+
+
+def avg_diffusion_potential(road_net, seeds, iter_count=100):
+    # find the set of seeds that maximizes the diffusion
+    affected_avg = 0.0
+
+    for n in range(0, iter_count):
+        affected = diffuse.decreasing_cascade(road_net, list(seeds),
+                                              diffusion_probability_generator=diffusion_probability)
+        affected_avg += len(affected)
+
+    affected_avg = affected_avg / iter_count
+
+    return affected_avg/len(nx.nodes(road_net))
 
 
 def node_infectiousness(road_net, nodes, max_iter=100, verbose=False):
