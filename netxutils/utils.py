@@ -2,7 +2,7 @@ import networkx as nx
 
 
 def load_toyroad():
-    network = nx.readwrite.read_adjlist("./data/toy/toyroad.edges",
+    network = nx.readwrite.read_adjlist("./data_decreasing_cascade/toy/toyroad.edges",
                                         comments="%",
                                         create_using=nx.Graph)
     network.name = "Toy Roads"
@@ -10,7 +10,7 @@ def load_toyroad():
 
 
 def load_euroroad():
-    network = nx.readwrite.read_adjlist("./data/euroroad/road-euroroad.edges",
+    network = nx.readwrite.read_adjlist("./data_decreasing_cascade/euroroad/road-euroroad.edges",
                                         comments="%",
                                         create_using=nx.Graph)
     network.name = "Euro Roads"
@@ -18,7 +18,7 @@ def load_euroroad():
 
 
 def load_italyroad():
-    network = nx.readwrite.read_adjlist("./data/italyroad/road-italy-osm.edges",
+    network = nx.readwrite.read_adjlist("./data_decreasing_cascade/italyroad/road-italy-osm.edges",
                                         comments="%",
                                         create_using=nx.Graph)
     network.name = "Italy Roads"
@@ -26,7 +26,7 @@ def load_italyroad():
 
 
 def load_minessotaroad():
-    network = nx.readwrite.read_adjlist("./data/minnesotaroad/road-minnesota.mtx",
+    network = nx.readwrite.read_adjlist("./data_decreasing_cascade/minnesotaroad/road-minnesota.mtx",
                                         comments="%",
                                         create_using=nx.Graph)
     network.name = "Minnesota Roads"

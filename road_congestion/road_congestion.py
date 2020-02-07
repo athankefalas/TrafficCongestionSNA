@@ -26,8 +26,9 @@ def run_road_congestion():
     # memory error.
 
     # Load road network
-    # road_net = u.load_italyroad()
-    road_net = u.load_toyroad()
+    # road_net = u.load_minessotaroad()
+    # road_net = u.load_toyroad()
+    road_net = u.load_minessotaroad()
 
     # if loaded road network is not connected get the largest
     # connected component as a sub-graph
@@ -71,7 +72,7 @@ def run_road_congestion():
     # infectiousness_map = node_infectiousness(road_net, nodes, max_iter=1000)
 
     print("Finding optimal intersections to handle high traffic...")
-    optimal_max = maximize_diffusion(road_net, nodes, critical_nodes_count, iter_count=1000)
+    optimal_max = maximize_diffusion(road_net, nodes, critical_nodes_count, iter_count=10)
 
     # print the influence max/minimization results and affected nodes
     print("Low traffic when congestion starts from:", optimal_max)
@@ -82,7 +83,7 @@ def run_road_congestion():
     print("")  # console padding
 
     print("Finding worst intersections to handle high traffic...")
-    optimal_min = minimize_diffusion(road_net, nodes, critical_nodes_count, iter_count=1000)
+    optimal_min = minimize_diffusion(road_net, nodes, critical_nodes_count, iter_count=10)
 
     print("High traffic when congestion starts from:", optimal_min)
     affected = diffuse.decreasing_cascade(road_net, optimal_min, diffusion_probability_generator=diffusion_probability)
