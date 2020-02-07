@@ -28,7 +28,7 @@ def run_road_congestion():
     # Load road network
     # road_net = u.load_minessotaroad()
     # road_net = u.load_toyroad()
-    road_net = u.load_minessotaroad()
+    road_net = u.load_toyroad()
 
     # if loaded road network is not connected get the largest
     # connected component as a sub-graph
@@ -71,8 +71,14 @@ def run_road_congestion():
     # get infectiousness map for all nodes
     # infectiousness_map = node_infectiousness(road_net, nodes, max_iter=1000)
 
+    # Number of iterations for diffusing using a specific set of seeds
+    # the diffusion potential is averaged from each iteration to avoid
+    # randomly optimal seeds. The larger the number of iterations the
+    # highest accuracy of the result.
+    iter_n = 100
+
     print("Finding optimal intersections to handle high traffic...")
-    optimal_max = maximize_diffusion(road_net, nodes, critical_nodes_count, iter_count=10)
+    optimal_max = maximize_diffusion(road_net, nodes, critical_nodes_count, iter_count=iter_n)
 
     # print the influence max/minimization results and affected nodes
     print("Low traffic when congestion starts from:", optimal_max)
@@ -83,7 +89,7 @@ def run_road_congestion():
     print("")  # console padding
 
     print("Finding worst intersections to handle high traffic...")
-    optimal_min = minimize_diffusion(road_net, nodes, critical_nodes_count, iter_count=10)
+    optimal_min = minimize_diffusion(road_net, nodes, critical_nodes_count, iter_count=iter_n)
 
     print("High traffic when congestion starts from:", optimal_min)
     affected = diffuse.decreasing_cascade(road_net, optimal_min, diffusion_probability_generator=diffusion_probability)
@@ -95,7 +101,7 @@ def run_road_congestion():
     print("")  # console padding
 
     print("Finding propagation ability of high priority nodes...")
-    affected_percentage_avg = avg_diffusion_potential(road_net, list(critical_nodes), iter_count=1000)
+    affected_percentage_avg = avg_diffusion_potential(road_net, list(critical_nodes), iter_count=iter_n)
     print("Average diffusion potential:", affected_percentage_avg)
 
 
